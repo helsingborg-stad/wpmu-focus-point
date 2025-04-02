@@ -1,0 +1,12 @@
+{
+    "name": "helsingborg-stad/wpmu-focus-point",
+    "type": "wordpress-muplugin",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Niclas Norin",
+            "email": "niclas.norin@helsingborg.se"
+        }
+    ],
+    "require": {},
+}
