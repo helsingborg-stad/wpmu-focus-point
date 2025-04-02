@@ -12,15 +12,24 @@ tr.compat-field-focusY {
     display: none;
 }
 
-.edit-attachment-frame .attachment-media-view {
-    .thumbnail.thumbnail-image {
-        display: flex;
-        flex-direction: column;
-        margin: 0;
-        gap: 1rem;
-
-        .details-image {
-            margin: 0;
-        }
+.wpmu-focus-point__container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    img {
+        margin: 0 !important;
     }
 }
+
+// .edit-attachment-frame .attachment-media-view {
+//     .thumbnail.thumbnail-image {
+//         display: flex;
+//         flex-direction: column;
+//         margin: 0;
+//         gap: 1rem;
+
+//         .details-image {
+//             margin: 0;
+//         }
+//     }
+// }
