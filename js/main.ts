@@ -14,35 +14,44 @@ class Main {
     }
 
     private init() {
-        const marker = document.createElement('div');    
-        marker.className = 'wpmu-focus-point__marker';
-        this.image.insertAdjacentElement("beforebegin", marker);
+        const [container, imageWrapper, marker] = this.structureMarkup();
 
-        let x = (parseFloat(this.focusX.value) / 100) * this.image.width || this.image.width / 2;
-        let y = (parseFloat(this.focusY.value) / 100) * this.image.height || this.image.height / 2;
+        let xPercent = parseFloat(this.focusX.value) || 50;
+        let yPercent = parseFloat(this.focusY.value) || 50;
         
-        this.updateMarkerPosition(x, y, marker);
+        this.updateMarkerPosition(xPercent, yPercent, marker);
 
         this.image.addEventListener("click", (event) => {
-            // Calculate percentages (0-100)
-            const percentX = Math.round((event.offsetX / this.image.width) * 100);
-            const percentY = Math.round((event.offsetY / this.image.height) * 100);
+            const rect = this.image.getBoundingClientRect();
             
-            this.updateMarkerPosition(event.offsetX, event.offsetY, marker);
-            this.focusX.value = percentX.toString();
-            this.focusY.value = percentY.toString();
+            const percentX = (event.offsetX / rect.width) * 100;
+            const percentY = (event.offsetY / rect.height) * 100;
+            
+            this.updateMarkerPosition(percentX, percentY, marker);
+            this.focusX.value = percentX.toFixed(2);
+            this.focusY.value = percentY.toFixed(2);
             this.focusX.dispatchEvent(new Event("change", { bubbles: true }));
             this.focusY.dispatchEvent(new Event("change", { bubbles: true }));
         });
     }
 
-    private updateMarkerPosition(x: number, y: number, marker: HTMLDivElement) {
-        const rect = this.image.getBoundingClientRect();
-        const relativeX = Math.round((x / this.image.width) * rect.width);
-        const relativeY = Math.round((y / this.image.height) * rect.height);
+    private updateMarkerPosition(xPercent: number, yPercent: number, marker: HTMLDivElement) {
+        marker.style.left = `${xPercent}%`;
+        marker.style.top = `${yPercent}%`;
+    }
 
-        marker.style.left = `${relativeX}px`;
-        marker.style.top = `${relativeY}px`;
+    private structureMarkup() {
+        const container = document.createElement('div');
+        const imageWrapper = document.createElement('div');
+        container.className = 'wpmu-focus-point__container';
+        this.image.insertAdjacentElement("beforebegin", container);
+        imageWrapper.appendChild(this.image);
+        container.appendChild(imageWrapper);
+        const marker = document.createElement('div');
+        marker.className = 'wpmu-focus-point__marker';
+        imageWrapper.appendChild(marker);
+
+        return [container, imageWrapper, marker];
     }
 }
 
