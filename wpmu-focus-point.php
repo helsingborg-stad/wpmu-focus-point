@@ -31,6 +31,9 @@ class WPMUFocusPoint
         add_action('admin_enqueue_scripts', array($this, 'enqueueAdminScripts'));
     }
 
+    /**
+     * Enqueue admin scripts and styles.
+     */
     public function enqueueAdminScripts()
     {
         wp_register_script(
@@ -48,6 +51,14 @@ class WPMUFocusPoint
         wp_enqueue_style('css-main');
         wp_enqueue_script('js-init');
     }
+
+    /**
+     * Add focus point fields to the media library attachment edit screen.
+     *
+     * @param array $fields The existing fields.
+     * @param object $post The current post object.
+     * @return array The modified fields.
+     */
     public function addFocusPointFields($fields, $post) 
     {
         $focusPoint = json_decode(get_post_meta($post->ID, '_focus_point', true), true);
@@ -56,44 +67,49 @@ class WPMUFocusPoint
         $focusX = $focusPoint['left'] ?? 50;
         $focusY = $focusPoint['top'] ?? 50;
 
-        // Hidden input fields with HTML rendering
-        $fields['focusX'] = [
-            'input' => 'html',
-            'html'  => sprintf(
-                '<input type="hidden" 
-                        id="focus-point-x-%d" 
-                        class="focus-point-input" 
-                        name="attachments[%d][focusX]" 
-                        value="%s" 
-                        data-js-focus-axis="x" 
-                        data-attachment-id="%d" />',
-                $post->ID,
-                $post->ID,
-                esc_attr($focusX),
-                $post->ID
-            )
-        ];
-        
-        $fields['focusY'] = [
-            'input' => 'html',
-            'html'  => sprintf(
-                '<input type="hidden" 
-                        id="focus-point-y-%d" 
-                        class="focus-point-input" 
-                        name="attachments[%d][focusY]" 
-                        value="%s" 
-                        data-js-focus-axis="y" 
-                        data-attachment-id="%d" />',
-                $post->ID,
-                $post->ID,
-                esc_attr($focusY),
-                $post->ID
-            )
-        ];
+        $fields['focusX'] = $this->generateFocusPointField('x', $post->ID, $focusX);
+        $fields['focusY'] = $this->generateFocusPointField('y', $post->ID, $focusY);
 
         return $fields;
     }
 
+    /**
+     * Generates a focus point hidden input field.
+     *
+     * @param string $axis Either 'x' or 'y'
+     * @param int $postId Attachment ID
+     * @param string $value Current focus point value
+     * @return array Field configuration array
+     */
+    function generateFocusPointField(string $axis, int $postId, string $value): array {
+        return [
+            'input' => 'html',
+            'html'  => sprintf(
+                '<input type="hidden" 
+                        id="focus-point-%s-%d" 
+                        class="focus-point-input" 
+                        name="attachments[%d][focus%s]" 
+                        value="%s" 
+                        data-js-focus-axis="%s" 
+                        data-attachment-id="%d" />',
+                strtolower($axis),
+                $postId,
+                $postId,
+                strtoupper($axis), // For name="attachments[%d][focusX]"
+                esc_attr($value),
+                strtolower($axis),
+                $postId
+            )
+        ];
+    }
+
+    /**
+     * Save the focus point fields when the attachment is saved.
+     *
+     * @param array $post The post data.
+     * @param array $attachment The attachment data.
+     * @return array The modified post data.
+     */
     public function saveFocusPointFields($post, $attachment)
     {
         if (isset($attachment['focusX']) && isset($attachment['focusY'])) {
