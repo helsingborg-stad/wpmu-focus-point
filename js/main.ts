@@ -38,8 +38,8 @@ class Main {
 
     private updateMarkerPosition(x: number, y: number, marker: HTMLDivElement) {
         const rect = this.image.getBoundingClientRect();
-        const relativeX = (x / this.image.width) * rect.width;
-        const relativeY = (y / this.image.height) * rect.height;
+        const relativeX = Math.round((x / this.image.width) * rect.width);
+        const relativeY = Math.round((y / this.image.height) * rect.height);
 
         marker.style.left = `${relativeX}px`;
         marker.style.top = `${relativeY}px`;
