@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (image && focusX && focusY) {
                 const attachmentId = focusX.dataset.attachmentId;
                 const attachment = wp.media.attachment(attachmentId);
-                console.log(attachment.get("mime"));
+
                 if (
                     !attachment ||
                     !attachment.get('mime') ||
@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 ) {
                     return;
                 }
-                console.log(attachment);
+
                 new Main(image, focusX, focusY);
             }
         }, 300);
