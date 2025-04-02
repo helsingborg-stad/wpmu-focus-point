@@ -1,4 +1,7 @@
 class Main {
+    private defaultX = 50;
+    private defaultY = 50;
+
     constructor(
         private image: HTMLImageElement,
         private focusX: HTMLInputElement,
@@ -13,12 +16,13 @@ class Main {
         }
     }
 
+    // Init functionality after image is loaded
     private init() {
         const [container, imageWrapper, marker] = this.structureMarkup();
 
-        let xPercent = parseFloat(this.focusX.value) || 50;
-        let yPercent = parseFloat(this.focusY.value) || 50;
-        
+        let xPercent = parseFloat(this.focusX.value) || this.defaultX;
+        let yPercent = parseFloat(this.focusY.value) || this.defaultY;
+
         this.updateMarkerPosition(xPercent, yPercent, marker);
 
         this.image.addEventListener("click", (event) => {
@@ -35,24 +39,30 @@ class Main {
         });
     }
 
+    // Sets the markers position
     private updateMarkerPosition(xPercent: number, yPercent: number, marker: HTMLDivElement) {
         marker.style.left = `${xPercent}%`;
         marker.style.top = `${yPercent}%`;
     }
 
+    // Creates the markup and move elements to make functionality work
     private structureMarkup() {
-        const container = document.createElement('div');
-        container.className = 'wpmu-focus-point__container';
-        const imageWrapper = document.createElement('div');
-        imageWrapper.className = 'wpmu-focus-point__image-wrapper';
+        const container = this.createDiv('wpmu-focus-point__container');
+        const imageWrapper = this.createDiv('wpmu-focus-point__image-wrapper');
+        const marker = this.createDiv('wpmu-focus-point__marker');
+
         this.image.insertAdjacentElement("beforebegin", container);
         imageWrapper.appendChild(this.image);
         container.appendChild(imageWrapper);
-        const marker = document.createElement('div');
-        marker.className = 'wpmu-focus-point__marker';
         imageWrapper.appendChild(marker);
 
         return [container, imageWrapper, marker];
+    }
+
+    private createDiv(className: string): HTMLDivElement {
+        const div = document.createElement('div');
+        div.className = className;
+        return div;
     }
 }
 
