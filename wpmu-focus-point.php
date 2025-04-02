@@ -23,12 +23,14 @@ require_once WPMUFOCUSPOINT_PATH . 'CacheBust.php';
 class WPMUFocusPoint
 {
     private $cacheBust;
+    private string $metaKey = '_focus_point';
     public function __construct()
     {
         $this->cacheBust = new CacheBust();
         add_filter('attachment_fields_to_edit', array($this, 'addFocusPointFields'), 10, 2);
         add_filter('attachment_fields_to_save', array($this, 'saveFocusPointFields'), 10, 2);
         add_action('admin_enqueue_scripts', array($this, 'enqueueAdminScripts'));
+        add_filter('attachment_focus_point', array($this, 'calculateValue'), 10, 2);
     }
 
     /**
@@ -121,10 +123,28 @@ class WPMUFocusPoint
                 'top' => $focusY
             ];
 
-            update_post_meta($post['ID'], '_focus_point', wp_json_encode($focusPoint));
+            update_post_meta($post['ID'], $this->metaKey, wp_json_encode($focusPoint));
         }
 
         return $post;
+    }
+
+    /**
+     * Calculate the focus point value.
+     *
+     * @param int $id The attachment ID.
+     * @return array The focus point values.
+     */
+    public function calculateValue(array $currentFocusPoint, int $id)
+    {
+        $jsonFocusPoint = get_post_meta($id, $this->metaKey, true);
+        $decodedFocusPoint = json_decode($jsonFocusPoint, true);
+
+        if (is_array($decodedFocusPoint) && isset($decodedFocusPoint['left'], $decodedFocusPoint['top'])) {
+            return $decodedFocusPoint;
+        }
+
+        return $currentFocusPoint;
     }
 }
 
