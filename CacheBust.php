@@ -20,7 +20,7 @@ class CacheBust
         if (file_exists($jsonPath)) {
             $revManifest = json_decode(file_get_contents($jsonPath), true);
         } elseif ($this->isDebug()) {
-            echo '<div style="color:red">Error: Assets not built. Go to ' . WPMUFOCUSPOINT_PATH . ' and run gulp. See ' . WPMUFOCUSPOINT_PATH . 'README.md for more info.</div>';
+            echo '<div style="color:red">Error: Assets not built. Go to ' . WPMUFOCUSPOINT_PATH . ' and run ``npm run build``. See ' . WPMUFOCUSPOINT_PATH . 'README.md for more info.</div>';
         }
 
         if (!isset($revManifest[$name])) {
