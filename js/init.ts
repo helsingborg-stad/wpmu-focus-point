@@ -4,6 +4,7 @@ declare const wp: any;
 
 const focusAttribute = "data-js-focus-axis";
 
+// Init functionality after the DOM is loaded
 document.addEventListener("DOMContentLoaded", () => {
     wp.media.view.Modal.prototype.on("open", () => {
         setTimeout(() => {
@@ -15,12 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 const attachmentId = focusX.dataset.attachmentId;
                 const attachment = wp.media.attachment(attachmentId);
 
-                if (
-                    !attachment ||
-                    !attachment.get('mime') ||
-                    !attachment.get('mime').includes("image") ||
-                    attachment.get('mime').includes("image/svg+xml")
-                ) {
+                if (!checkAttachment(attachment)) {
                     return;
                 }
 
@@ -29,3 +25,13 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 300);
     });
 });
+
+// Check that the attachment is an image and not an SVG
+const checkAttachment = (attachment: any): boolean => {
+    return (
+        !!attachment &&
+        !!attachment.get('mime') &&
+        attachment.get('mime').includes("image") &&
+        !attachment.get('mime').includes("image/svg+xml")
+    );
+};
