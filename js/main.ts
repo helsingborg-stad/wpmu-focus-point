@@ -42,8 +42,9 @@ class Main {
 
     private structureMarkup() {
         const container = document.createElement('div');
-        const imageWrapper = document.createElement('div');
         container.className = 'wpmu-focus-point__container';
+        const imageWrapper = document.createElement('div');
+        imageWrapper.className = 'wpmu-focus-point__image-wrapper';
         this.image.insertAdjacentElement("beforebegin", container);
         imageWrapper.appendChild(this.image);
         container.appendChild(imageWrapper);
