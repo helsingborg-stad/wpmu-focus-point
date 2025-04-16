@@ -16,8 +16,8 @@ module.exports = {
      * Add your entry files here
      */
     entry: {
-        'js/init': './js/init.ts',
-        'css/main': './sass/main.scss'
+        'js/wpmu-focus-point': './js/wpmu-focus-point.ts',
+        'css/wpmu-focus-point': './sass/wpmu-focus-point.scss'
     },
     
     /**
