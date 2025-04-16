@@ -39,19 +39,19 @@ class WPMUFocusPoint
     public function enqueueAdminScripts()
     {
         wp_register_script(
-            'js-init',
+            'js-wpmu-focus-point',
             WPMUFOCUSPOINT_URL . '/dist/' .
-            $this->cacheBust->name('js/init.js')
+            $this->cacheBust->name('js/wpmu-focus-point.js')
         ); 
 
         wp_register_style(
-            'css-main',
+            'css-wpmu-focus-point',
             WPMUFOCUSPOINT_URL . '/dist/' .
-            $this->cacheBust->name('css/main.css')
+            $this->cacheBust->name('css/wpmu-focus-point.css')
         );
 
-        wp_enqueue_style('css-main');
-        wp_enqueue_script('js-init');
+        wp_enqueue_style('css-wpmu-focus-point');
+        wp_enqueue_script('js-wpmu-focus-point');
     }
 
     /**

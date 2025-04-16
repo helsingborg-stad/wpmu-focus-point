@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const focusX = document.querySelector(`input[${focusAttribute}="x"]`) as HTMLInputElement;
             const focusY = document.querySelector(`input[${focusAttribute}="y"]`) as HTMLInputElement;
             const image = document.querySelector(`img.details-image:not(.icon)`) as HTMLImageElement;
-
+            
             if (image && focusX && focusY) {
                 const attachmentId = focusX.dataset.attachmentId;
                 const attachment = wp.media.attachment(attachmentId);
