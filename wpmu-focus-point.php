@@ -86,6 +86,7 @@ class WPMUFocusPoint
     function generateFocusPointField(string $axis, int $postId, string $value): array {
         return [
             'input' => 'html',
+            'label' => '',
             'html'  => sprintf(
                 '<input type="hidden" 
                         id="focus-point-%s-%d" 
