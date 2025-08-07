@@ -6,6 +6,10 @@ const focusAttribute = "data-js-focus-axis";
 
 // Init functionality after the DOM is loaded
 document.addEventListener("DOMContentLoaded", () => {
+    if (!wp || !wp.media || !wp.media.view || !wp.media.view.Modal) {
+        return;
+    }
+
     wp.media.view.Modal.prototype.on("open", () => {
         setTimeout(() => {
             const focusX = document.querySelector(`input[${focusAttribute}="x"]`) as HTMLInputElement;
